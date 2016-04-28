@@ -1,0 +1,300 @@
+服务器域名 www.weixinbx.com
+
+所有用到密码的操作都会用MD5加密，加密前统一先拼字符 ",vs/.1.~" ，例如密码是123456的用户，先拼接成 123456,vs/.1.~  ，再进行MD5加密。
+不明白看下面的登录接口，传的password就是明文密码拼接,vs/.1.~，然后进行MD5加密再提交。
+
+接口：
+
+登录
+/managerLogin
+参数：
+user_name  用户账号 (必传)
+password   用户密码 （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+
+例子：
+http://127.0.0.1:8080/managerLogin?user_name=15000000000&password=d2e00f818f353921038b3b5aaeb10ed9&client=1
+返回json
+{"user_info":{"account":"15000000000","balance":0,"goodsCount":0,"id":403,"openTime":"","operatorId":0,"password":"d2e00f818f353921038b3b5aaeb10ed9","qq":0,"remark":"","status":1,"supperId":0,"supplier":true,"type":-1,"updateTime":"","weixin":"15000000000"},"status":1,"goods_count":0,"tips":"登录成功！"}
+
+json说明：
+user_info:用户信息json对象 {
+account:账号 
+balance：余额  (目前没用处，留着以后备用)
+goodsCount:商品剩余件数(供货商=0)
+id:用户ID 
+openTime：开通时间 
+operatorId:开通人Id 
+password:加密后的密码 
+qq:qq号 
+remark：备注  
+status:账号状态 1-开通状态 2-冻结状态 冻结的账号不可以有任何操作
+supperId:上级ID
+supplier:    是否是供货商
+type:账号类型  -2:终级管理员  -1:供货商  1：特级分销商 2：分销商
+updateTime:修改时间
+weixin:微信号
+}
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+goods_count:该账户下的所有商品总和（供货商=0）
+
+获取订单列表
+orderList
+
+参数：
+status ：订单状态 0:全部 1：处理中 2：已完成 （不传默认是0）
+type   : 商品类型 对应商品对象的goods_id   0：全部 （不传默认是0）
+search :搜索内容 用户可根据UDID,买家旺旺，操作账号进行订单搜索（选传）
+page   :分页的页数 （必传）
+line   :每页多少行  （必传）
+channel_market: 销售渠道 0:全部 1：淘宝 2：微信 （不传默认是0）
+export_status：导出状态  0:全部 1：未导出 2：已导出 （不传默认是0）
+password : 加密后的用户密码  （必传）
+operator_id ：当前账号ID     （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+begin_time:开始时间,格式2016-04-15 
+end_time：结束时间，格式2016-04-15 
+
+例子：
+http://127.0.0.1:8080/orderList?status=0&type=0&search=&page=1&line=10&channel_market=0&export_status=1&password=d2e00f818f353921038b3b5aaeb10ed9&client=1&operator_id=404
+返回json
+{"status":1,"tips":"获取成功！","count":11,"sum":138,"cost":96,"list":[{"cost":6,"downloadUrl":"","exportStatus":1,"goodsName":"杀毒软件","id":13417,"marketChannel":1,"operator":"15111111111","operatorId":404,"operatorType":"特级分销商","status":1,"sum":10,"time":"2016-04-15 10:33:56.0","type":72,"udid":"ajxnajzhanajxnajzhanajxnajzhanajxnkjhgfd","wangwang":"521452"}
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+count:筛选的订单总数,用于分页
+sum:  筛选的订单销售总额
+cost: 筛选的订单成本总额
+
+list: cost : 成本      downloadUrl : 下载内容     exportStatus  导出状态 1：未导出 2：已导出 goodsName:商品类型  id: 订单ID  marketChannel 销售渠道 1：淘宝 2：微信   operator：操作账号 operatorId:操作账号ID  status 订单状态 1：处理中 2：已完成 sum:售价  time : 时间 type:商品ID  udid:udid wangwang : 买家旺旺
+
+
+供应商及他的下级 获取商品列表
+aGoodsList
+参数：
+password : 加密后的用户密码  （必传）
+operator_id ：当前账号ID     （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+例子：
+http://127.0.0.1:8080/aGoodsList?status=1&password=d2e00f818f353921038b3b5aaeb10ed9&client=1&operator_id=404
+
+
+返回json
+{"list":[{"accountId":0,"cost":6,"count":6,"goodsId":72,"goodsName":"杀毒软件","id":644,"supperAdminId":0}"status":1,"tips":"获取成功！"}
+
+说明：
+list:  商品的json 数组  accountId ：这里不用管   cost ： 成本价   count : 剩余数量（0的话，不可以添加订单。供应商会是0，供应商不可以添加订单，只能修改） goodsId: 商品ID goodsName:商品名 id:暂时不用管 supperAdminId：暂时不用管
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+
+
+添加/修改订单
+orderEditSubmit
+参数：
+doWhat    add : 添加  edit:修改
+id       订单ID  （添加订单不用传）
+udid      udid  必须是36或40位字符串，不可以有空格
+wangwang 买家旺旺
+sum      售价
+type     商品ID 
+status   订单状态    1 : 处理中  2：已完成       （添加订单不用传）
+market_channel    销售渠道 1：淘宝 2：微信 
+export_status     导出状态   1：未导出 2：已导出     （添加订单不用传）
+download_url      下载内容 （添加订单不用传）
+			
+password : 加密后的用户密码  （必传）
+operator_id ：当前账号ID （供应商能修改订单，但是不能添加订单）    （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+
+例子：
+http://127.0.0.1:8080/orderEditSubmit?client=1&operator_id=404&password=d2e00f818f353921038b3b5aaeb10ed9&doWhat=edit&id=13417&wangwang=123664&sum=20&type=4&status=1&market_channel=1&udid=ffffffffffffffffffffffffffffffffffffffff
+返回json
+{"status":1,"tips":"操作成功！"}
+
+
+
+
+关于账号的接口
+一、下级账号列表
+accountList
+参数：
+password : 加密后的用户密码  （必传）
+operator_id ：需要查询其子账号列表的账号ID （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+page    :  分页的页数 （默认是1）
+line    :  每页多少行  (默认20)
+status  :  状态   1:已开通  2：冻结  0： 全部 （默认是0）
+
+search  :  搜索字符串 用户可以输入字符进行模糊查询 (默认可不传)
+
+例子：
+http://127.0.0.1:8080/accountList?client=1&operator_id=404&password=d2e00f818f353921038b3b5aaeb10ed9&page=1&line=20
+
+返回json
+{"status":1,"tips":"获取成功！","count":11,"list":[{"account":"15606060606","balance":0,"childCount":0,"goodsCount":0,"id":430,"openTime":"2016-04-15 11:26:35.0","operatorId":403,"password":"d2e00f818f353921038b3b5aaeb10ed9","qq":214521458,"remark":"","status":1,"supperId":403,"supplier":false,"type":1,"updateTime":"","weixin":"52145214"}
+
+json说明：
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+count:筛选的账号总数,用于分页
+list: 账号json数组
+       account: 账号用户名   balance : 余额 （目前没用处，留着以后备用） childCount:下级数量 id : 账号ID openTime ：开通时间 operatorId : 上一次修改该账号的账号ID（这里暂时不返回，因为没用） 
+       password : 加密后的密码  qq:qq reamrk:备注 status: 账号状态（ 1：已开通 2：冻结） supperId:开通人Id  supplier:是否是供货商 type：账号类型（-2:终级管理员  -1:供货商  1：特级分销商 2：分销商）
+	   updateTime : 上一次修改该账号的时间（这里暂时不返回值） weixin :微信号 goodsCount:商品剩余件数
+	   
+
+	   
+二、添加\编辑下级账号
+accountEditSubmit
+参数：
+password : 加密后的用户密码  （必传）
+operator_id ：当前账号ID （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+do :  (add:添加下级账号  edit:编辑下级账号） 必传
+id : 要编辑的下级账号ID （添加下级账号不传 编辑账号时必传）
+type : 账号类型（-2:终级管理员  -1:供货商  1：特级分销商 2：分销商） 只能添加比自己低一级的几号，比如：供应商只能添加特级分销商账号 （添加账号时必传，编辑账号可不传）
+account :要添加或编辑的账号用户名
+a_password:要添加或编辑的账号密码,明文传递即可。
+status : 状态   1:已开通  2：冻结  （选传,添加账号默认是开通状态）
+remark : 备注 （选传）
+weixin ：微信号 （选传）
+qq     : qq号     （选传）
+goods_ids ： 要修改成本价的商品ID  如果有多个用"|"作为分割符 如：12|13|15 (选传)
+costs     :  要修改的成本价    如果有多个用"|"作为分割符，对应goods_ids 如：12|13|15 (选传)
+例子：
+http://127.0.0.1:8080/accountEditSubmit?do=edit&id=101&operator_id=99&qq=12345&client=1&password=d2e00f818f353921038b3b5aaeb10ed9
+http://127.0.0.1:8080/accountEditSubmit?do=add&operator_id=403&qq=12345&client=1&a_password=123456&type=1&account=15555555555&status=1&password=d2e00f818f353921038b3b5aaeb10ed9
+
+返回json
+{"status":1,"tips":"操作成功 ！"}
+
+json说明：
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+
+三、增加/转让商品
+transfer
+参数：
+password : 加密后的用户密码  （必传）
+operator_id ：当前账号ID （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+transfer_id  对方账号ID
+a_goods_ids  ： 要增加/转让的商品ID，对应aGoodsList返回的商品列表里 ，list json数组里的，goods_id的值。 如果有多个用","隔开
+counts       :  增加/转让的商品件数，如果有多个用","隔开。
+
+例子：
+http://127.0.0.1:8080/transfer?operator_id=99&transfer_id=101&client=1&password=d2e00f818f353921038b3b5aaeb10ed9&a_goods_ids=40,39&counts=1,2
+返回json
+{"status":1,"tips":"操作成功!"}
+json说明：
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+
+
+
+
+交易记录接口
+dealList
+参数：
+password : 加密后的用户密码  （必传）
+operator_id ：当前账号ID （必传）
+client     web端代号  手机网页版传 1  电脑网页版传2 （必传）
+page    :  分页的页数 （默认是1）
+line    :  每页多少行  (默认20)
+type    :  交易类型  1 ： 增加   2：转让  (选传)
+goods_id:  交易的商口ID (选传)
+search  ： 可以根据交易订单编号来模糊查询交易记录 (选传)
+start_time ： 起始时间 (选传)
+end_time  ：  结束时间 (选传)
+
+例子：
+http://127.0.0.1:8080/dealList?client=1&operator_id=404&password=d2e00f818f353921038b3b5aaeb10ed9&page=1&line=20
+返回json
+{"status":1,"tips":"获取成功！","count":35,"list":[{"account":"15404040404","count":10,"fromId":404,"goodsId":71,"goodsName":"开店软件","id":853,"recordOrderId":"20160414184113971v404s426","time":"2016-04-14 18:41:15.863","toId":426,"type":2},{"account":"15404040404","count":10,"fromId":404,"goodsId":72,"goodsName":"杀毒软件","id":852,"recordOrderId":"20160414184113960v404s426","time":"2016-04-14 18:41:15.853","toId":426,"type":2}
+
+json说明：
+status:请求返回的状态，1表示成功 0表示失败
+tips:请求返回的提示
+count: 记录总数 用于分页计算
+list: 交易记录 json数组 
+          account:交易对象
+          count: 交易数量 
+	  fromId : 这次交易的操作账号ID
+	  goodsId : 交易的商口ID
+	  goodsName : 交易的商品名
+	  id : 交易记录ID
+	  recordOrderId: 订单编号
+	  time : 交易时间
+	  toId : 对方账号ID
+	  type : 交易类型  1 ： 增加   2：转让  (选传)
+
+
+编辑增加商品：
+goodsSubmit
+参数:
+do=add添加商品，do=edit编辑商品,这时候要传商品的id
+goods_name:商品名称
+cost:成本价
+operator_id:当前账号id(供应商)
+password:MD5加密后的密码(必传)
+client: web端代号  手机网页版传 1  电脑网页版传2 （必传）
+id:商品id
+http://127.0.0.1:8080/goodsSubmit?do=edit&goods_name=装修软件&cost=12&operator_id=403&password=d2e00f818f353921038b3b5aaeb10ed9&client=1&id=2
+
+删除商品
+goodsSubmit
+do=delete
+id:商品id
+operator_id:当前账号id(供应商)
+password:MD5加密后的密码(必传)
+client: web端代号  手机网页版传 1  电脑网页版传2 （必传）
+
+http://127.0.0.1:8080/goodsSubmit?do=delete&operator_id=403&password=d2e00f818f353921038b3b5aaeb10ed9&client=1&id=53
+返回：{"status":-1,"tips":"删除失败，下线还有商品未卖出!"}  
+
+
+获取商品列表
+sGoodsList
+参数：
+page:页码（选传，默认为1）
+line:每页显示几条记录（选传，默认为10）
+status：选传（默认为1）
+operator_id:当前账号id(供应商)
+password:MD5加密后的密码(必传)
+client: web端代号  手机网页版传 1  电脑网页版传2 （必传）
+
+http://127.0.0.1:8080/sGoodsList?operator_id=2&password=d2e00f818f353921038b3b5aaeb10ed9&client=1
+
+
+补充 ：供应商可以给下级增加商品件数。而特级分销商只能给他的下级转让，转让后特级自己的件数会变少。
+
+批量导出UDID
+batchExport
+参数：
+operator_id:当前操作账号id(终极管理员、供应商)（必传）
+password:MD5加密后的密码（必传）
+ids:订单id,多个订单用|分割，例如12|45|65
+client: web端代号  手机网页版传 1  电脑网页版传2 （必传）
+
+http://127.0.0.1:8080/batchExport?operator_id=403&password=d2e00f818f353921038b3b5aaeb10ed9&client=2&ids=13417|12354
+
+成功：http://www.weixinbx.com/export/2016_04_19_17_09_18.txt   失败：{"status":0,"tips":"该账号没有权限导出UDID"}
+
+
+批量设置下载地址
+settingsDownloadUrls
+参数：
+operator_id:当前操作账号id(终极管理员、供应商)（必传）
+password:MD5加密后的密码（必传）
+download_urls：设置下载地址
+ids:订单id,多个订单用|分割，例如12|45|65
+client: web端代号  手机网页版传 1  电脑网页版传2 （必传）
+
+http://127.0.0.1:8080/settingsDownloadUrls?operator_id=403&password=d2e00f818f353921038b3b5aaeb10ed9&client=2&ids=13417|12354&download_urls=www.xiazai.com
+
+
+成功；批量设置成功。 失败：{"status":0,"tips":"改账号没有权限设置下载地址！"}
+
+
+
+

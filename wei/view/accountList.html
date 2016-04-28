@@ -1,0 +1,202 @@
+<div class="conRight">
+  <div class="rightHeader">
+    <ul class="add">
+      <li class="addBtn" ng-click="addBtnClick('add')">+&nbsp;添加账号</li>
+      <li class="search"><input type="text" ng-model="searchValue" ng-focus="searchFocus()" ng-blur="searchBlur()"><i ng-click="searchBtn()"></i></li>
+    </ul>
+  </div>
+  <div class="rightContent">
+    <div class="tabclass">
+      <a href="javascript:void(0)">微商分销系统</a><span>|</span><a href="javascript:void(0)">账号管理</a>
+    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>账号</td>
+          <td>账号类型</td>
+          <td>状态</td>
+          <td>下级数量</td>
+          <td>开通人</td>
+          <td>开通时间</td>
+          <td>操作</td>
+        </tr>
+        <tr dir-paginate="x in list | itemsPerPage: usersPerPage" total-items="totalUsers" current-page="pagination.current" ng-class="{ 'active' : allCheck || allCheckValue[$index] } " >
+          <td>{{x.account}}</td>
+          <td>{{(x.type == -2 ? "终极管理员" : (x.type == -1 ? "供货商" : (x.type == 1 ? "特级分销商" : x.type == 2 ? "分销商" : "未知")))}}</td>
+          <td>{{x.status == 1 ? "已开通" : x.status == 2 ? "冻结" : "未知"}}</td>
+          <td>{{x.childCount}}</td>
+          <td>{{userName}}({{ userType == -2 ? "终极管理员" : (userType == -1 ? "供货商" : (userType == 1 ? "特级分销商" : "分销商"))}})</td>
+          <td>{{x.openTime}}</td>
+          <td>
+            <a href="javascript:void(0)" class="modify" ng-if="userType != 2" ng-click="addBtnClick('edit',x)"><i></i>修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0)" class="modify" ng-click="addBtnClick('transfer',x)"><i></i>{{ (userType == -2 || userType == -1) ? '增加' : '转让' }}</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+  </div>
+</div>
+<div class="popwrap" ng-hide="popshow">
+    <div class="popbg"></div>
+    <div class="popbox">
+        <div class="boxwrap">
+            <div class="boxtitle">
+                <a href="javascript:void(0)" class="close" ng-click="popshow = !popshow"></a>
+            </div>
+            <div class="boxbd">
+                <div class="mess">
+                    <ul ng-if="doWhat.add">
+                        <li>
+                            <div class="changeName">
+                                账号类型
+                            </div>
+                            <div class="changeInput">
+                                <select ng-model="doWhat.params.type" style="width: 303px;">
+                                    <option value="-1" ng-if="userType == -2">供货商</option>
+                                    <option value="1" ng-if="userType == -1">特级分销商</option>
+                                    <option value="2" ng-if="userType == 1">分销商</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                账号用户名
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.account" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                账号密码
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.a_password" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                状态
+                            </div>
+                            <div class="changeInput">
+                                <select ng-model="doWhat.params.status" style="width: 303px;">
+                                    <option value="1">已开通</option>
+                                    <option value="2">冻结</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                备注
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.remark" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                微信号
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.weixin" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                qq号
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.qq" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li ng-repeat="good in goodList">
+                            <div class="changeName" value="{{good.goodsId}}">
+                                {{good.goodsName}}(成本价)
+                            </div>
+                            <div class="changeInput">
+                                <input type="text"  ng-init="good.index = $index" ng-model="doWhat.params.costs[good.index]" ng-trim="true" placeholder="成本价" style="width: 264px;">&nbsp;&nbsp;元
+                            </div>
+                        </li>
+                    </ul>
+                    <ul ng-if="doWhat.edit">
+                        <li>
+                            <div class="changeName">
+                                账号用户名
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.account" readonly="readonly" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                账号密码
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.a_password" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                状态
+                            </div>
+                            <div class="changeInput">
+                                <select ng-model="doWhat.params.status" style="width: 303px;">
+                                    <option value="1">已开通</option>
+                                    <option value="2">冻结</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                备注
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.remark" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                微信号
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.weixin" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                qq号
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.qq" ng-trim="true" style="width: 294px;">
+                            </div>
+                        </li>
+                        <li ng-repeat="good in goodList">
+                            <div class="changeName" value="{{good.goodsId}}">
+                                {{good.goodsName}}(成本价)
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-init="good.index = $index" ng-trim="true" ng-model="doWhat.params.costs[good.index]" placeholder="成本价" style="width: 264px;">&nbsp;&nbsp;元
+                            </div>
+                        </li>
+                    </ul>
+                    <ul ng-if="doWhat.transfer">
+                        <li ng-repeat="p in goodList">
+                            <div class="changeName" style="width: 130px;">
+                                {{p.goodsName}}
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-init="p.index = $index" ng-trim="true" ng-model="doWhat.params.counts[p.index]" style="width: 100px;">&nbsp;&nbsp;个
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="btnbox">
+                    <button class="qx" ng-click="popshow = !popshow">取消</button>
+                    <button class="qd" ng-click="upChange(doWhat.params)" ng-if="!doWhat.transfer">确定</button>
+                    <button class="qd" ng-click="transferUpChange(doWhat.params)" ng-if="doWhat.transfer">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

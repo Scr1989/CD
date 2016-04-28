@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="微商分销系统">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>微商分销系统</title>
+        <link rel="stylesheet" href="css/mbdatepicker.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body ng-app="myApp" ng-controller="myCtrl" ng-cloak>
+        <!-- 头部 -->
+        <div class="header">
+        	<div class="logo"></div>
+        	<div class="quit" ng-click="userQuit()">退出</div>
+        	<div class="person" ng-click="person()">{{userName}}({{ userType == -2 ? "终极管理员" : (userType == -1 ? "供货商" : (userType == 1 ? "特级分销商" : "分销商"))}})</div>
+        </div>
+        <!-- 内容 -->
+        <div class="content">
+            <!-- 左侧 -->
+            <div class="conLeft">
+            	<ul>
+            		<li class="order" ng-class="{'this':selectName[0]}"><a href="#/orderList"><i></i>订单管理</a></li>
+            		<li class="account" ng-class="{'this':selectName[1]}" ng-if="userType == -1 || userType == -2 || userType == 1"><a href="#/accountList"><i></i>账号管理</a></li>
+            		<li class="goods" ng-class="{'this':selectName[2]}" ng-if="userType == -1 || userType == -2"><a href="#/aGoodsList"><i></i>商品管理</a></li>
+                    <li class="trading" ng-class="{'this':selectName[3]}"><a href="#/dealList"><i></i>交易记录</a></li>
+            	</ul>
+            </div>
+            <!-- 右侧 -->
+            <ng-view></ng-view>
+            <div class="popwrap"  ng-if="popshow">
+                <div class="popbg"></div>
+                <div class="popbox" style="margin-top:-145px;">
+                    <div class="boxwrap">
+                        <div class="boxtitle">
+                            <a href="javascript:void(0)" class="close" ng-click="$parent.popshow = false"></a>
+                        </div>
+                        <div class="boxbd">
+                            <div class="mess">
+                                <ul>
+                                    <li>
+                                        <div class="changeName">
+                                            账号用户名
+                                        </div>
+                                        <div class="changeInput">
+                                            {{userChange.account}}
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="changeName">
+                                            账号密码
+                                        </div>
+                                        <div class="changeInput">
+                                            <input type="text" ng-model="userChange.a_password" ng-trim="true">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="changeName">
+                                            微信号
+                                        </div>
+                                        <div class="changeInput">
+                                            <input type="text" ng-model="userChange.weixin" ng-trim="true">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="changeName">
+                                            qq号
+                                        </div>
+                                        <div class="changeInput">
+                                            <input type="text" ng-model="userChange.qq" ng-trim="true">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="btnbox">
+                                <button class="qx" ng-click="$parent.popshow = false">取消</button>
+                                <button class="qd" ng-click="userUpChange(userChange)">确定</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-route.min.js"></script>
+        <script type="text/javascript" src="js/angular-md5.min.js"></script>
+        <script type="text/javascript" src="js/pagination/dirPagination.js"></script>
+        <script type="text/javascript" src="js/mbdatepicker.js"></script>
+        <script type="text/javascript" src="js/moment.js"></script>
+        <script type="text/javascript" src="js/angular-cookie.min.js"></script>
+        <script type="text/javascript" src="js/utils/utils.js"></script>
+        <script type="text/javascript" src="js/main.js"></script> 
+        <script type="text/javascript" src="js/viewmodel/accountList.js"></script> 
+        <script type="text/javascript" src="js/viewmodel/aGoodsList.js"></script> 
+        <script type="text/javascript" src="js/viewmodel/dealList.js"></script> 
+        <script type="text/javascript" src="js/viewmodel/orderList.js"></script> 
+    </body>
+</html>

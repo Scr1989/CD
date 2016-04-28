@@ -1,0 +1,212 @@
+<div class="conRight">
+  <div class="rightHeader">
+    <ul class="load" ng-if="userType == -1 || userType == -2">
+      <li class="checkAll"><input type="checkbox" ng-model="$parent.allCheck" />全选</li>
+      <li><button ng-click="outThing('UDID')">批量导出UDID</button></li>
+      <li><button ng-click="updownLoad()">批量设置下载</button></li>
+      <li><button ng-click="outThing('wangwang')">批量导出买家旺旺</button></li>
+    </ul>
+    <ul class="add">
+      <li class="addBtn" ng-click="addBtnClick('add')" ng-if="userType == 1 || userType == 2">+&nbsp;添加订单</li>
+      <li class="time">
+      <mb-datepicker arrows="arrows" calendar-header="header" date="beginTime" date-format="YYYY-MM-DD"></mb-datepicker>
+      <span class="zhi">至</span>
+      <mb-datepicker arrows="arrows" calendar-header="header" date="overTime" date-format="YYYY-MM-DD"></mb-datepicker><em>日期</em></li>
+      
+      <li class="search"><input type="text" ng-model="searchValue" ng-focus="searchFocus()" ng-blur="searchBlur()"><i ng-click="searchBtn()"></i></li>
+    </ul>
+  </div>
+  <div class="rightContent">
+    <div class="tabclass">
+      <a href="javascript:void(0)">微商分销系统</a><span>|</span><a href="javascript:void(0)">订单管理</a>
+    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td><i></i>商品类型</td>
+          <td>UDID</td>
+          <td>买家旺旺</td>
+          <td>成本/售价</td>
+          <td>状态</td>
+          <td>销售途径</td>
+          <td>时间</td>
+          <td>操作账号</td>
+          <td>操作</td>
+        </tr>
+        <tr dir-paginate="x in list | itemsPerPage: usersPerPage" total-items="totalUsers" current-page="pagination.current" ng-class="{ 'active' : allCheck || allCheckValue[$index] } " >
+          <td><input type="checkbox" ng-checked="allCheck" ng-model="allCheckValue[$index]" value="{{x.id}}" /></td>
+          <td>{{x.udid}}</td>
+          <td>{{x.wangwang}}</td>
+          <td>{{x.cost+'/'+x.sum}}</td>
+          <td>{{x.status == 1 ? '处理中' : x.status == 2 ? '已完成' : '未知'}}</td>
+          <td>{{x.marketChannel == 1 ? '淘宝' : x.marketChannel == 2 ? '微信' : '未知'}}</td>
+          <td>{{x.time}}</td>
+          <td>{{x.operator}}</td>
+          <td><a href="javascript:void(0)" class="modify" ng-click="addBtnClick('edit',x)"><i></i>修改</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+  </div>
+</div>
+<div class="popwrap" ng-hide="popshow">
+    <div class="popbg"></div>
+    <div class="popbox">
+        <div class="boxwrap">
+            <div class="boxtitle">
+                <a href="javascript:void(0)" class="close" ng-click="popshow = !popshow"></a>
+            </div>
+            <div class="boxbd">
+                <div class="mess">
+                    <ul ng-if="urlBl" ng-init="downLoadurl">
+                        <li>
+                            <div class="changeName">
+                                设置下载地址
+                            </div>
+                            <div class="changeInput">
+                                <input type="text"  ng-model="$parent.downLoadurl" ng-trim="true">
+                            </div>
+                        </li>
+                    </ul>
+                    <ul ng-if="doWhat.add">
+                        <li>
+                            <div class="changeName">
+                                UDID
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.udid" placeholder="必须是36或40位字符串，不可以有空格" maxlength="40" ng-trim="true">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                买家旺旺
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.wangwang" ng-trim="true">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                销价
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.sum" placeholder="{{ doWhat.params.cost ? '成本价:'+doWhat.params.cost+'元' : ''}}" ng-trim="true">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                商品类型
+                            </div>
+                            <div class="changeInput">
+                                <select ng-model="doWhat.params.type" ng-change="doWhat.change(doWhat.params.type)">
+                                    <option ng-repeat="good in goodList" value="{{good.goodsId}}">{{good.goodsName}}</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                销售途径
+                            </div>
+                            <div class="changeInput">
+                                <select ng-model="doWhat.params.market_channel">
+                                    <option value="1">淘宝</option>
+                                    <option value="2">微信</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="changeName">
+                                下载内容
+                            </div>
+                            <div class="changeInput">
+                                <input type="text" ng-model="doWhat.params.download_url" ng-readonly="userType != -1 && userType != -2 " ng-trim="true">
+                            </div>
+                        </li>
+                    </ul>
+                    <ul ng-if="doWhat.edit">
+                      <li>
+                          <div class="changeName">
+                              UDID
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.udid" placeholder="必须是36或40位字符串，不可以有空格" maxlength="40" ng-trim="true">
+                          </div>
+                      </li>
+                      <li>
+                          <div class="changeName">
+                              买家旺旺
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.wangwang" ng-trim="true">
+                          </div>
+                      </li>
+                      <li>
+                          <div class="changeName">
+                              销价
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.sum" placeholder="成本价:{{doWhat.params.cost}}元" style="width:180px;" ng-trim="true">&nbsp;&nbsp;元
+                          </div>
+                      </li>
+                      <li>
+                          <div class="changeName">
+                              商品类型
+                          </div>
+                          <div class="changeInput">
+                              <select ng-model="doWhat.params.type">
+                                    <option ng-repeat="good in goodList" value="{{good.goodsId}}">{{good.goodsName}}</option>
+                              </select>
+                          </div>
+                      </li>
+                      <li ng-if="userType == -1 || userType == -2">
+                          <div class="changeName">
+                              订单状态
+                          </div>
+                          <div class="changeInput">
+                              <select ng-model="doWhat.params.status">
+                                  <option value="1">处理中</option>
+                                  <option value="2">已完成</option>
+                              </select>
+                          </div>
+                      </li>
+                      <li>
+                          <div class="changeName">
+                              销售渠道
+                          </div>
+                          <div class="changeInput">
+                              <select ng-model="doWhat.params.market_channel">
+                                  <option value="1">淘宝</option>
+                                  <option value="2">微信</option>
+                              </select>
+                          </div>
+                      </li>
+                      <!-- <li>
+                          <div class="changeName">
+                              导出状态
+                          </div>
+                          <div class="changeInput">
+                              <select ng-model="doWhat.params.export_status">
+                                  <option value="1">未导出</option>
+                                  <option value="2">已导出</option>
+                              </select>
+                          </div>
+                      </li> -->
+                      <li>
+                          <div class="changeName">
+                              下载内容
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.download_url" ng-readonly="userType != -1 && userType != -2 " ng-trim="true">
+                          </div>
+                      </li>
+                    </ul>
+                </div>
+                <div class="btnbox">
+                    <button class="qx" ng-click="popshow = !popshow">取消</button>
+                    <button class="qd" ng-click="upChange(doWhat.params)" ng-hide="urlBl">确定</button>
+                    <button class="qd" ng-click="setDownLoad(downLoadurl)" ng-if="urlBl">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

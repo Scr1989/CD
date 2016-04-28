@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="微商分销系统">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>微商分销系统</title>
+        <link rel="stylesheet" href="css/index.css">
+    </head>
+    <body ng-app="myApp" ng-controller="myCtrl" ng-cloak>
+		<div class="content">
+			<div class="logo"></div>
+			<div class="passname"><i></i><input type="text" name="passname" ng-model="passname" autocomplete="on"  placeholder="账号"></div>
+			<div class="password"><i></i><input type="password" name="password" ng-model="password" placeholder="密码"></div>
+			<div class="remember">
+				<div class="left">
+					<input type="checkbox" ng-model="nameCheck">
+					<label for="">记住账号</label>
+				</div>
+				<div class="right">
+					<input type="checkbox" ng-model="wordCheck">
+					<label for="">记住密码</label>
+				</div>
+			</div>
+			<div class="button" ng-click="login()">登&nbsp;&nbsp;&nbsp;&nbsp;录</div>
+		</div>
+        <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-md5.min.js"></script>
+        <script type="text/javascript" src="js/angular-cookie.min.js"></script>
+        <script type="text/javascript" src="js/index.js"></script> 
+    </body>
+</html>

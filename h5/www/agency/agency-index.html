@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>机构详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <link href="../css/ionic.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <script data-main="../js/main" src="../js/require.js"></script>
+    <script type="text/javascript" src="../js/view/agency-index.js"></script>
+  </head>
+  <body class="agency-index" ng-app="ionicApp" ng-controller="agency-index" ng-cloak style="background: #f0f0f0;">
+	<ion-header-bar>
+		<div class="button tl" ng-click="backGo()">
+		</div>
+	  	<h1 class="title">机构详情</h1>
+	  	<div class="button tr" ng-click="share()">
+		</div>
+	</ion-header-bar>
+	<ion-content overflow-scroll="true">
+		<div class="bd" >
+			<div class="control">
+				<div class="text-center institutions" style="background: #fff">
+					<div class="img pr" style="line-height: 0px;">
+						<img ng-src="{{logo}}" alt="">
+						<span>V认证</span>
+					</div>
+					<div class="name pr">
+						{{name}}
+						<p class="location">{{location}}</p>
+					</div>
+				</div>
+		  		<div class="row bgfff attention">
+					<div class="col text-center">
+						人气值&nbsp;<span class="red">{{popular}}</span>
+					</div>
+					<div class="col text-center">
+						接单量&nbsp;{{sales}}
+					</div>
+					<div class="col text-center">
+						<img src="../image/icon_star_default.png" alt="">
+						<img src="../image/icon_star_default.png" alt="">
+						<img src="../image/icon_star_default.png" alt="">
+						<img src="../image/icon_star_default.png" alt="">
+						<img src="../image/icon_star_default.png" alt="">
+						{{star}}
+					</div>
+				</div>
+				<div class="row row-select bgfff mt625">
+					<div class="col text-center service" ng-class="selectName_1" ng-click="service()">
+						{{serviceName}}
+					</div>
+					<div class="col text-center" ng-class="selectName_2" ng-click="institutions()">
+						机构资质
+					</div>
+				</div>
+				<div class="pr serviceList" ng-hide="serviceList">
+					<ul class="list pa">
+					    <li class="item" ng-repeat="x in classList"  ng-click="itemListFun(x)">{{x}}<i></i></li>
+					</ul>
+				</div>
+				<div class="bdcont clear bgfff" ng-hide="serviceHide" >
+					<div class="template">
+						<div class="left box col50" ng-repeat="x in list">
+							<div class="imgbox pr">
+								<a ng-href="model-details?product={{x.href}}">
+									<img ng-src="{{x.pic}}" alt="">
+									<img class="cm pa" ng-if="x.cm" src="../image/pinpai.png" alt="">
+								</a>
+							</div>
+							<div class="textbox">
+								<div class="title">
+									{{x.title}}
+								</div>
+								<div class="price clear">
+									<span class="nd left">
+										{{x.need}}
+									</span>
+									<span class="unit-price right">
+										{{x.price}}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<ion-infinite-scroll ng-if="!serviceHide" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+				</div>
+				<div class="bdcont clear" ng-hide="institutionsHide">
+					<div class="details bgfff">
+						<div class="row">
+						  <div class="col col-20">成立时间</div>
+						  <div class="col">{{setUpTime}}</div>
+						</div>
+						<div class="row">
+						  <div class="col col-20">详情地址</div>
+						  <div class="col"><a href="">{{address}}</a></div>
+						</div>
+						<div class="row">
+						  <div class="col col-20">公司简介</div>
+						  <div class="col">{{introduction}}</div>
+						</div>
+					</div>
+					<div class="service bgfff mt625">
+						<div class="row">
+						  <div class="col">
+						  	<div class="title"><i></i>服务项目</div>
+						  	<div><span ng-repeat="x in serviceProject">{{x}}</span></div>
+						  </div>
+						</div>
+					</div>
+					<div class="honor bgfff mt625">
+						<div class="row" ng-click="honorToggleFun()">
+						  <div class="col">
+							<i class="ion-img"></i>
+						  	<span class="op07">荣誉资质</span>
+						  	<i class="ion" ng-class="ion[0]"></i>
+						  </div>
+						</div>
+						<div class="row" ng-hide="honorToggle">
+						  <div class="col">
+						  	<img ng-repeat="x in honoraryCertificate" ng-src="{{x}}" alt="">
+						  </div>
+						</div>
+					</div>
+					<div class="site bgfff mt625">
+						<div class="row" ng-click="siteToggleFun()">
+						  <div class="col">
+						  	<i class="ion-img"></i>
+						  	<span class="op07">场地配置</span>
+						  	<i class="ion" ng-class="ion[1]"></i>
+						  </div>
+						</div>
+						<div class="row" ng-hide="siteToggle">
+						  <div class="col">
+						  	<img ng-repeat="x in siteConfiguration" ng-src="{{x}}" alt="">
+						  </div>
+						</div>
+					</div>
+					<div class="cooperation bgfff mt625">
+						<div class="row" ng-click="cooperationToggleFun()">
+						  <div class="col">
+						  	<i class="ion-img"></i>
+						  	<span class="op07">合作商家</span>
+						  	<i class="ion" ng-class="ion[2]"></i>
+						  </div>
+						</div>
+						<div class="row" ng-hide="cooperationToggle">
+							<div class="col">
+								<img ng-repeat="x in merchants" ng-src="{{x}}" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+		  	</div>
+	</div>
+	</ion-content> 
+	<ion-footer-bar>
+		<div class="button-bar">
+			<a class="button button-bookmark" ng-click="markPopup()"><i></i>&nbsp;收藏</a>
+			<a class="button button-consulting" ng-click="consultingShow()"><i></i>&nbsp;咨询</a>
+			<a class="button button-schedule" href=""><i></i>&nbsp;档期</a>
+		</div>
+	</ion-footer-bar>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<div class="conRight">
+  <div class="rightHeader">
+    <ul class="add">
+      <li class="addBtn" ng-click="addBtnClick('add')">+&nbsp;添加商品</li>
+      <li class="search"><input type="text" ng-model="searchValue" ng-focus="searchFocus()" ng-blur="searchBlur()"><i ng-click="searchBtn()"></i></li>
+    </ul>
+  </div>
+  <div class="rightContent">
+    <div class="tabclass">
+      <a href="javascript:void(0)">微商分销系统</a><span>|</span><a href="javascript:void(0)">商品管理</a>
+    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>序号</td>
+          <td>商品名</td>
+          <td>成本价</td>
+          <td>修改</td>
+          <td>删除</td>
+        </tr>
+        <tr ng-repeat="x in list" ng-class="{ 'active' : allCheck || allCheckValue[$index] } " >
+          <td>{{$index+1}}</td>
+          <td>{{x.goodsName}}</td>
+          <td>{{x.cost}}元</td>
+          <td><a href="javascript:void(0)" class="modify" ng-click="addBtnClick('edit',x)"><i></i></a></td>
+          <td><a href="javascript:void(0)" class="delete" ng-click="addBtnClick('delete',x)"><i></i></a></td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
+<div class="popwrap" ng-hide="popshow">
+    <div class="popbg"></div>
+    <div class="popbox">
+        <div class="boxwrap">
+            <div class="boxtitle">
+                <a href="javascript:void(0)" class="close" ng-click="popshow = !popshow"></a>
+            </div>
+            <div class="boxbd">
+                <div class="mess">
+                    <ul ng-if="doWhat.add">
+                        <li>
+                          <div class="changeName">
+                              商品名称
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.goods_name" style="width:130px;" ng-trim="true">
+                          </div>
+                      </li>
+                      <li>
+                          <div class="changeName">
+                              成本价
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.cost" style="width:130px;" ng-trim="true">
+                          </div>
+                      </li>
+                    </ul>
+                    <ul ng-if="doWhat.edit">
+                      <li>
+                          <div class="changeName">
+                              商品名称
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.goods_name" style="width:130px;" ng-trim="true">
+                          </div>
+                      </li>
+                      <li>
+                          <div class="changeName">
+                              成本价
+                          </div>
+                          <div class="changeInput">
+                              <input type="text" ng-model="doWhat.params.cost" style="width:130px;" ng-trim="true">
+                          </div>
+                      </li>
+                    </ul>
+                    <ul ng-if="doWhat.delete">
+                      <li style="width:100%;display:block;">
+                          <div class="changeName" style="width:100%;display:block;text-align:center;">
+                              是否确认删除商品
+                          </div>
+                      </li>
+                    </ul>
+                </div>
+                <div class="btnbox">
+                    <button class="qx" ng-click="popshow = !popshow">取消</button>
+                    <button class="qd" ng-click="upChange(doWhat.params)">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

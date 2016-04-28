@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>模特详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <link href="../css/ionic.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <script data-main="../js/main" src="../js/require.js"></script>
+    <script type="text/javascript" src="../js/view/model-details.js"></script>
+  </head>
+  <body class="model-details" ng-app="ionicApp" ng-controller="model-details" ng-cloak style="background: #f0f0f0;">
+	<ion-content overflow-scroll="true">
+		<div class="control">
+			<div class="toppic bgfff">
+				<div class="pic pr">
+					<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+					<i class="goback pa" ng-click="backGo()"></i>
+					<div class="markbook pa" ng-click="markPopup()">
+						<i></i>
+						<span>86</span>
+					</div>
+				</div>
+				<div class="row title">
+					<div class="col">
+						模特Fiona
+						<i class="share" ng-click="share()"></i>
+					</div>
+				</div>
+				<div class="row pricebox">
+					<div class="col clear">
+						<span class="price">&yen;&nbsp;100/件</span>
+						<span>1件起拍</span>
+						<span>剩余999件</span>
+					</div>
+				</div>
+				<div class="row tab">
+					<div class="col clear">
+						<span class="select">内景按件</span>
+						<span>外景按件</span>
+						<span>按小时</span>
+					</div>
+				</div>
+				<div class="row time">
+					<div class="col">
+						拍摄日期&nbsp;2015.11.12
+					</div>
+				</div>
+			</div>
+			<div class="comment mt625">
+				<div class="row bgfff">
+					<div class="col">
+						25人购买，55次浏览
+						<i></i><span>全部评论(0)</span>
+					</div>
+				</div>
+			</div>
+			<div class="business mt625">
+				<div class="row bgfff">
+					<div class="col clear">
+						<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+						<span>
+							<p>Inspire含沙射影</p>
+							<p><img src="../image/icon_star_default.png" alt=""><img src="../image/icon_star_default.png" alt=""><img src="../image/icon_star_default.png" alt=""><img src="../image/icon_star_default.png" alt=""><img src="../image/icon_star_default.png" alt=""></p>
+						</span>
+						<i></i>
+					</div>
+				</div>
+			</div>
+			<div class="row row-select bgfff mt625">
+				<div class="col text-center" ng-class="selectName_1" ng-click="sample()" style="border-right: 1px solid #b2b2b2;">
+					样片展示
+				</div>
+				<div class="col text-center" ng-class="selectName_2" ng-click="service()">
+					服务详情
+				</div>
+			</div>
+			<div class="bdcont sample bgfff" ng-hide="serviceHide">
+				<div class="row">
+					<div class="col">
+						<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+						<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+						<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+						<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+						<img src="https://gd1.alicdn.com/bao/uploaded/i1/28472109/TB2jBkzlpXXXXX8XXXXXXXXXXXX_!!28472109.jpg_400x400.jpg_.webp" alt="">
+					</div>
+				</div>
+				<ion-infinite-scroll ng-if="!serviceHide" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+			</div>
+			<div class="bdcont service clear" ng-hide="institutionsHide">
+				<div class="details bgfff">
+					<div class="row">
+					  <div class="col col-20">模特类型</div>
+					  <div class="col">女模</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">模特风格</div>
+					  <div class="col">欧美</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">身高</div>
+					  <div class="col">171</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">体重</div>
+					  <div class="col">51</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">三围</div>
+					  <div class="col">0-0-0</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">衣码</div>
+					  <div class="col">S</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">裤码</div>
+					  <div class="col">28</div>
+					</div>
+					<div class="row">
+					  <div class="col col-20">鞋码</div>
+					  <div class="col">37</div>
+					</div>
+				</div>
+				<div class="serve bgfff mt625">
+					<div class="row">
+						<div class="col clear">
+							<span>拍摄原图不少于</span>
+							<b>20张</b>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col clear">
+							<span>修图数量</span>
+							<b>10张</b>
+						</div>
+					</div>
+					<div class="row psdetail">
+						<div class="col text-center">
+							<span class="th-detail">修图明细</span>
+							<table>
+								<tbody>
+									<tr>
+										<th>全身</th>
+										<th>半身</th>
+										<th>侧身</th>
+										<th>背面</th>
+										<th>穿着细节</th>
+									</tr>
+									<tr>
+										<td>6</td>
+										<td>2</td>
+										<td>2</td>
+										<td>2</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="photosize bgfff mt625">
+					<div class="row">
+						<div class="col clear">
+							<span>照片尺寸</span>
+							<b>1024*678</b>
+						</div>
+					</div>
+				</div>
+				<div class="figureAgreed bgfff mt625">
+					<div class="row">
+						<div class="col clear">
+							<span>交图约定</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col textbox">
+							交图时间为拍摄后___个工作日以内；<br>
+							修图完成为选图___个工作日内;<br>
+							请至少拍摄日期前___天将拍摄物品邮寄到拍摄地点。
+						</div>
+					</div>
+				</div>
+				<div class="other bgfff mt625">
+					<div class="row">
+						<div class="col clear">
+							<span>增值服务</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col clear buttonbox">
+							<span>不满意无条件重修</span>
+							<span>好评包邮</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col clear">
+							<span>购买须知</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col noticebox">
+							<p>
+								以上报价为普通拍摄简修。宝贝邮寄费由买家负责。
+								请咨询完毕后购买、如宝贝没有按时间寄送，则日期
+								顺延
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+	  	</div>
+	</ion-content> 
+	<ion-footer-bar>
+		<div class="button-bar">
+			<a class="button button-bookmark" ng-click="markPopup()"><i></i>&nbsp;收藏</a>
+			<a class="button button-consulting" ng-click="consultingShow()"><i></i>&nbsp;咨询</a>
+			<a class="button button-buy" href=""><i></i>&nbsp;购买</a>
+		</div>
+	</ion-footer-bar>
+  </body>
+</html>

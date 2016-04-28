@@ -1,0 +1,37 @@
+<div class="conRight">
+  <div class="rightHeader">
+    <ul class="add">
+      <li class="time">
+      <mb-datepicker element-id='beginTime' arrows="arrows" calendar-header="header" date="beginTime" date-format="YYYY-MM-DD"></mb-datepicker>
+      <span class="zhi">至</span>
+      <mb-datepicker element-id='overTime' arrows="arrows" calendar-header="header" date="overTime" date-format="YYYY-MM-DD"></mb-datepicker><em>日期</em></li>
+      <li class="search"><input type="text" ng-model="searchValue" ng-focus="searchFocus()" ng-blur="searchBlur()"><i ng-click="searchBtn()"></i></li>
+    </ul>
+  </div>
+  <div class="rightContent">
+    <div class="tabclass">
+      <a href="javascript:void(0)">微商分销系统</a><span>|</span><a href="javascript:void(0)">交易记录</a>
+    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>序号</td>
+          <td>订单编号</td>
+          <td>交易对象</td>
+          <td>商品类型</td>
+          <td>数量</td>
+          <td>时间</td>
+        </tr>
+        <tr dir-paginate="x in list | itemsPerPage: usersPerPage" total-items="totalUsers" current-page="pagination.current" ng-class="{ 'active' : allCheck || allCheckValue[$index] } " >
+          <td>{{$index+1}}</td>
+          <td>{{x.recordOrderId}}</td>
+          <td>{{x.account}}</td>
+          <td>{{x.goodsName}}</td>
+          <td>{{x.type == 1 ? "+" : x.type == "2" ? "-" : "未知"}}{{x.count}}</td>
+          <td>{{x.time}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+  </div>
+</div>
